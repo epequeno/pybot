@@ -1,4 +1,5 @@
-#!/usr/bin/python
+#!/usr/bin
+/python
 import irclib
 import time
 import re
@@ -8,7 +9,6 @@ from modules import google
 from modules import bitcoincharts
 from modules import blockchain
 
-# Triggers with space after should expect arguments from the user
 TRIGGERS = ['!help', '!g ', '!news ', '!img ', '!books ', '!btc', '!bc']
 
 class Ghost(irclib.SimpleIRCClient):
@@ -26,9 +26,10 @@ class Ghost(irclib.SimpleIRCClient):
             try:
                 options = json.load(open(confFile))
             except:
-                err = "Err, something went wrong loading settings.conf"
+                err = ("An error occoured while loading %s") % confFile
                 return err
         else:
+            #  TODO: actually make the code to create a new conf file with defaults
             return "No configuration file found. Creating new file ~/.ghost/settings.conf"
         return options
 
@@ -54,7 +55,7 @@ class Ghost(irclib.SimpleIRCClient):
 
     def say(self, thingToSay):
         """thingToSay should be a string for now"""
-        self.connection.privmsg(self.chanToSay, str(thingToSay))
+        self.connection.privmsg(self.chanToSay, thingToSay)
 
     def join(self, chan):
         """join chan. chan should be string"""
@@ -68,7 +69,7 @@ class Ghost(irclib.SimpleIRCClient):
         """disconnect ghost"""
         self.connection.disconnect(arg)
 
-    #  main function caller
+    #  main trigger caller
     def on_pubmsg(self, connection, event):
         """
         main msgHandler each branch of the nested if/else block
@@ -86,7 +87,7 @@ class Ghost(irclib.SimpleIRCClient):
             for trig in trigs:
                 if trig.match(msg):
                     if trig == trigs[0]:
-                        self.say("I will respond to these: " + str(TRIGGERS))
+                        self.say("I will respond to: " + str(TRIGGERS))
                     elif trig == trigs[1]:
                         results = google.search(msg)
                         for result in results:
@@ -109,5 +110,5 @@ class Ghost(irclib.SimpleIRCClient):
                         self.say(blockchain.stats())
 
 if __name__== "__main__":
-    ZombieTorg = Ghost()
-    ZombieTorg.ghostStart()
+    casper = Ghost()
+    casper.ghostStart()
