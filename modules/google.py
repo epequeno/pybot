@@ -29,7 +29,7 @@ def search(query, variation='web', trigLen=3):
 			break
 		title = utils.fmtForSay(results[i]['titleNoFormatting'])
 		url = urllib.unquote(results[i]['url'])
-		answer = ('%s (%s)' % (title[:RESPONSE_TITLE_LENGTH], url))
+		answer = '%s (%s)' % (title[:RESPONSE_TITLE_LENGTH], url)
 		yield answer
 
 def news(query):
